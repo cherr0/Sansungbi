@@ -48,6 +48,9 @@ public class ClientPanel extends JPanel {
     public ClientPanel(Client client) {
         this.client = client;
         panelState = PANEL_STATE_OPEN;
+
+        // 테두리 작성
+        setBorder(BorderFactory.createLineBorder(Color.GRAY, 5));
     }
 
 
@@ -112,6 +115,7 @@ public class ClientPanel extends JPanel {
         }
     }
 
+    // 리스트 비어있는지 확인
     public boolean checkEmptyList() {
         if(drawList.isEmpty()){
             System.out.println("리스트 비어있음");

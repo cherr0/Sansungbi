@@ -1,9 +1,23 @@
 package process;
 
+import GUI.ClientPanel;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class MyListener implements ActionListener {
+
+    ClientPanel cp;
+
+    // 콘솔 출력 thread 테스트용 리스트, 스레드
+    private ArrayList<String> typeList;
+    private ArrayList<String> wordList = new ArrayList<String>();
+//    private ThreadTest ttest;
+
+    public MyListener(ClientPanel cp) {
+        this.cp = cp;
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -16,7 +30,14 @@ public class MyListener implements ActionListener {
          }
     }
 
-    private void isReady() {
+    void isReady() {
+        cp.setPanelState(ClientPanel.PANEL_STATE_ISREADY);
+        System.out.println("isReady() 메소드 시작");
+
+    }
+
+    void selectWords() {
+        int typeidx = 0;
 
     }
 }

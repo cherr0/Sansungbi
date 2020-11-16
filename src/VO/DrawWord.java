@@ -66,8 +66,9 @@ public class DrawWord implements Serializable {
 		this.dy = dy;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	// 단계에 따라 떨어지는 y 속도값 추가
+	public void yMover() {
+		y += dy;
 	}
 	
 	

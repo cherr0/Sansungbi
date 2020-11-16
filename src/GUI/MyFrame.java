@@ -1,20 +1,27 @@
 package GUI;
 
 import javax.swing.*;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
+import java.awt.*;
 
 public class MyFrame extends JFrame {
-	
+
+	NPanel nPanel;
+	ClientPanel cPanel;
+
     public MyFrame(String name){
     	setTitle(name);
-    	setSize(800, 596);
-    	setLocationRelativeTo(null);		// GUI 창을 화면 중앙에 띄움
-    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	setLayout(new CardLayout());
-    	
-    	
-    	
-    	setVisible(true);
+		Rectangle range = new Rectangle(0, 0, 700, 600);
+		setBounds(range);		// 절대값으로 위치 설정
+		setResizable(false);	// 창 크기 조절 불가
+		setLayout(new BorderLayout());
+
+		Client client = new Client();
+
+
+		nPanel = new NPanel();
+		cPanel = new ClientPanel(client);
+
+		add(nPanel, BorderLayout.NORTH);
+		add(cPanel, BorderLayout.CENTER);
     }
 }

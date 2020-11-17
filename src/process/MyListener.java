@@ -1,6 +1,9 @@
 package process;
 
 import GUI.ClientPanel;
+import GUI.EPanel;
+import GUI.NPanel;
+import GUI.SPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +12,9 @@ import java.util.ArrayList;
 public class MyListener implements ActionListener {
 
     ClientPanel cp;
+    EPanel ep;
+    SPanel sp;
+    NPanel np;
 
     // 콘솔 출력 thread 테스트용 리스트, 스레드
     private ArrayList<String> typeList;
@@ -17,6 +23,18 @@ public class MyListener implements ActionListener {
 
     public MyListener(ClientPanel cp) {
         this.cp = cp;
+    }
+
+    public MyListener(EPanel ep){
+        this.ep = ep;
+    }
+
+    public MyListener(SPanel sp){
+        this.sp = sp;
+    }
+
+    public MyListener(NPanel np){
+        this.np = np;
     }
 
     @Override

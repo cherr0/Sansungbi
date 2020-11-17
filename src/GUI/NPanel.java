@@ -28,7 +28,7 @@ public class NPanel extends JPanel {
         wordPanel.add(tfUsername, BorderLayout.CENTER);
 
         // 유저 등록 버튼 생성
-        signUp = new JButton("등록");
+        signUp = new JButton("Sign");
         signUp.setActionCommand("Sign");
 //        signUp.addActionListener(ml); // 나중에 리스너 연결
 

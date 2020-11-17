@@ -18,9 +18,10 @@ public class SPanel extends JPanel {
 
     public SPanel() {
         // 레이아웃 설정
+
         setLayout(new GridLayout(2,1));
-        wordPanel.setLayout(new BorderLayout());
-        chatPanel.setLayout(new BorderLayout());
+        wordPanel = new JPanel(new BorderLayout());
+        chatPanel = new JPanel(new BorderLayout());
         setBorder(border);
 
 

@@ -15,10 +15,7 @@ import java.util.ArrayList;
 public class Client {
 
     private JFrame f;                                    // 기본 프레임
-    private JPanel cPanel;                               // 각각 기능별로 나눈 패널
 
-    private JTextArea userList;                          // 유저 표시 Area
-    private JButton start, signup;                       // 게임 스타트, 서버에 이름 등록
 
     // 클라이언트별 Info
     private int score;              // 점수

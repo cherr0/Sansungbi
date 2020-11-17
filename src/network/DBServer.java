@@ -5,6 +5,7 @@ import VO.AcidRain;
 import VO.DrawWord;
 import VO.Message;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -98,7 +99,7 @@ public class DBServer {
         }
     }
 
-    public int checkPanelStateAndTypeName(Message msg){
+    public int checkPanelStateAndTypeName(Message msg) {
         System.out.println("msg의 typeidx: " + msg.getAcidrain().getTypeidx());
         int pState = 0;     // panel State
         int userSize = 0;
@@ -117,5 +118,44 @@ public class DBServer {
         System.out.println("모든 유저 준비 완료");
         System.out.println("panelStateAndTypeName 끝나기 직전 idx : " + typeIdx);
         return typeIdx;
+    }
+
+
+
+    public DBServer() {
+        ss = null;
+        s = null;
+        try{
+            ss = new ServerSocket(12345);
+            System.out.println("서버 생성 성공!");
+        }catch (IOException e) {
+            System.out.println("서버 소켓 에러: " + e);
+            return; // 서버 소켓 생성 실패 시 메소드 종료
+        }
+
+
+        while(true) {
+            User user = null;
+            String remoteIP = "";
+            try{
+                System.out.println("서버 접속 대기중");
+                s = ss.accept();
+                remoteIP = s.getInetAddress().getHostAddress();
+
+                System.out.println(remoteIP + "가 서버에 접속했습니다.");
+
+
+                // 통신 스레드
+                user = new User(this, s);
+                userList.add(user);     // 리스트에 유저 추가
+                user.start();           // 스레드 하나 만들었으니 시작
+
+            }catch(IOException e){
+                System.out.println("소켓 생성 실패" + e);
+            }
+        }
+
+
+
     }
 }

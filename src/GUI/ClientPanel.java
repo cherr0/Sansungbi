@@ -1,6 +1,7 @@
 package GUI;
 
 import VO.DrawWord;
+import client.Client;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,7 +33,7 @@ public class ClientPanel extends JPanel {
 
     // 애니메이션 쓰레드 관련 변수
     private boolean onAir = false;
-//    private AniThread at;
+    private AniThread at;
     private DrawWord word;
     private int deltaY;         //난이도에 따라 지속적으로 증가하는 값
     private Color c = new Color(245,245,255);
@@ -78,10 +79,10 @@ public class ClientPanel extends JPanel {
     public void onOffThread() {
         if(!onAir){
             onAir = true;
-//            at = new AniThread;
+            at = new AniThread();
 
             System.out.print("게임 시작");
-//            at.start();
+            at.start();
         }else {
             onAir = !onAir;
             System.out.println("게임 종료");

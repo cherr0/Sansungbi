@@ -1,15 +1,19 @@
 package GUI;
 
+import client.MyListener;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
 public class EPanel extends JPanel {
 
-    JPanel listPanel, playerPanel, typePanel, startPanel;    // 유저목록 패널, 게임 타입 확인 패널, 게임시작 패널
-    JTextArea userList, typeList;               // 접속한 유저목록, 단어 타입 목록
-    JTextField typeSelect;                      // 단어 타입 선택
-    private JButton start;                      // 게임 스타트 버튼
+    private MyListener ml = new MyListener(this);
+
+    public JPanel listPanel, playerPanel, typePanel, startPanel;    // 유저목록 패널, 게임 타입 확인 패널, 게임시작 패널
+    public JTextArea userList, typeList;               // 접속한 유저목록, 단어 타입 목록
+    public JTextField typeSelect;                      // 단어 타입 선택
+    public JButton start;                      // 게임 스타트 버튼
 
     // border 윤곽 설정
     Border border = BorderFactory.createLineBorder(new Color(230,230,238),7);
@@ -50,13 +54,14 @@ public class EPanel extends JPanel {
 
        typeSelect = new JTextField();
        // 커맨드, 리스너 추가
-//       typeSelect.setActionCommand("G");
-//       typeSelect.addActionListener(al);
+       typeSelect.setActionCommand("G");
+       typeSelect.addActionListener(ml);
        typeSelect.setBorder(border);
        typeSelect.setBackground(new Color(232,240,220));
 
        start = new JButton("START GAME");
        start.setActionCommand("Start");
+       start.addActionListener(ml);
        start.setBorder(border);
 
        startPanel.add(typeSelect,BorderLayout.NORTH);

@@ -1,22 +1,28 @@
 package GUI;
 
+import client.Client;
+import client.MyListener;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class MyFrame extends JFrame {
 
-	NPanel nPanel;
-	EPanel ePanel;
-	SPanel sPanel;
-	ClientPanel cPanel;
+	MyListener ml;
+
+	public NPanel nPanel;
+	public EPanel ePanel;
+	public SPanel sPanel;
+	public ClientPanel cPanel;
 
     public MyFrame(String name){
     	setTitle(name);
 		Rectangle range = new Rectangle(0, 0, 700, 600);
-		setBounds(range);		// Àı´ë°ªÀ¸·Î À§Ä¡ ¼³Á¤
-		setResizable(false);	// Ã¢ Å©±â Á¶Àı ºÒ°¡
+		setBounds(range);		// ì ˆëŒ€ê°’ìœ¼ë¡œ ìœ„ì¹˜ ì„¤ì •
+		setResizable(false);	// ì°½ í¬ê¸° ì¡°ì ˆ ë¶ˆê°€
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
+		ml = new MyListener(this);
 
 		Client client = new Client();
 

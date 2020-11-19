@@ -3,9 +3,9 @@ package VO;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Message implements Serializable{	//Á÷·ÄÈ­ÇÏ¿© º¸³¾ °´Ã¼
-	//»ç½Ç ¾êµµ ÃÖ»óÀ§ ÇÏ³ª ¸¸µé¾î³õ°í ¿ëµµº°·Î ´Ù¸£°Ô
-	//¾²·Á¸é º¯¼öÃß°¡ÇÒ°Ô ¾Æ´Ï¶ó »ó¼Ó½ÃÄÑ¼­ »ç¿ëÇØ¾ßÇÔ
+public class Message implements Serializable{	//ì§ë ¬í™”í•˜ì—¬ ë³´ë‚¼ ê°ì²´
+
+	// ì¶”í›„ ì‹œê°„ì´ ëœë‹¤ë©´ í´ë˜ìŠ¤ë¡œ ë§Œë“¤ì–´ì„œ ë³€ìˆ˜ ì‚¬ìš©ì´ ì•„ë‹Œ ìƒì†ì‹œì¼œì„œ ì‚¬ìš©
 	public static int IS_CONNECTED = 1;
 	public static int IS_READY = 2;
 	public static int IS_PLAYING_GAME = 3;
@@ -17,22 +17,22 @@ public class Message implements Serializable{	//Á÷·ÄÈ­ÇÏ¿© º¸³¾ °´Ã¼
 	private int type = 0;
 	private AcidRain acidrain;
 
-	//select¸¦ À§ÇÑ ArrayListº¸°ü¿ë
+	//selectë¥¼ ìœ„í•œ ArrayListë³´ê´€ìš©
 	private ArrayList<AcidRain> list;
 
-	//À¯Àú¸®½ºÆ® À§ÇÑ String º¸°ü¿ë
+	//ìœ ì €ë¦¬ìŠ¤íŠ¸ ìœ„í•œ String ë³´ê´€ìš©
 	private ArrayList<String> uList;
 	private String uListString;
 
-	//ÀÌ¸§Ã¼ÀÎÁö¸¦ À§ÇÑ String º¸°ü
+	//ì´ë¦„ì²´ì¸ì§€ë¥¼ ìœ„í•œ String ë³´ê´€
 	private String nameString;
 	private String entryString;
 
-	//DrawWord List¸¦ Å¬¶ó·Î º¸³»±âÀ§ÇÑ ¸®½ºÆ®
+	//DrawWord Listë¥¼ í´ë¼ë¡œ ë³´ë‚´ê¸°ìœ„í•œ ë¦¬ìŠ¤íŠ¸
 	private ArrayList<DrawWord> dwList;
 	private int panelState;
 
-	//³×Æ®¿öÅ©¸¦ À§ÇÑ °¢°¢ÀÇ myStateº¸°ü
+	//ë„¤íŠ¸ì›Œí¬ë¥¼ ìœ„í•œ ê°ê°ì˜ myStateë³´ê´€
 	private int state;
 
 	

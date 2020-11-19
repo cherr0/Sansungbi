@@ -6,14 +6,14 @@ public class AcidRain implements Serializable {
 
 	private static final long serialVersionUID = 403131881182796609L;
 	
-	private int wordidx;	// ´Ü¾îÀÎµ¦½º
-	private String word;	// ´Ü¾î ³»¿ë
-	private int typeidx;	// ´Ü¾î Å¸ÀÔ idx
-	private boolean wordflag;	// ´Ü¾î »èÁ¦ flag
-	private String typename;	// ´Ü¾î Å¸ÀÔ
+	private int wordidx;	// ë‹¨ì–´ ì¸ë±ìŠ¤
+	private String word;	// ë‹¨ì–´
+	private int typeidx;	// ë‹¨ì–´ íƒ€ì… idx
+	private boolean wordflag;	// ë‹¨ì–´ ì‚­ì œ flag
+	private String typename;	// ë‹¨ì–´ íƒ€ì…
 	
-	private String username;	// »ç¿ëÀÚ
-	private String ip;			// »ç¿ëÀÚ ip
+	private String username;	// ì‚¬ìš©ì
+	private String ip;			// user ip
 
 	
 	/* ------ getter, setter ------ */

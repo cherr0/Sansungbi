@@ -3,7 +3,7 @@ package VO;
 import java.io.Serializable;
 
 public class DrawWord implements Serializable {
-	// °¢ ´Ü¾îÀÇ x, y, ³»¿ë, Ç¥½ÃÀ¯¹«¸¦ °¡Áö´Â °´Ã¼
+	// ê° ë‹¨ì–´ì˜ x, y, ë‚´ìš©, í‘œì‹œìœ ë¬´ë¥¼ ê°€ì§€ëŠ” ê°ì²´
 
 	private static final long serialVersionUID = 355351511455294186L;
 	
@@ -66,7 +66,7 @@ public class DrawWord implements Serializable {
 		this.dy = dy;
 	}
 
-	// ´Ü°è¿¡ µû¶ó ¶³¾îÁö´Â y ¼Óµµ°ª Ãß°¡
+	// ë‹¨ê³„ì— ë”°ë¼ ë–¨ì–´ì§€ëŠ” y ì†ë„ê°’ ì¶”ê°€
 	public void yMover() {
 		y += dy;
 	}

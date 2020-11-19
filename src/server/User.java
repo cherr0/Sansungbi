@@ -1,4 +1,4 @@
-package network;
+package server;
 
 import DB.RainDAO;
 import VO.AcidRain;
@@ -180,11 +180,22 @@ public class User extends Thread {
                 switch(msgType){
                     case 0:     // 유저 등록
                         insertUser(msg.getAcidrain());
-
                     case 1:
+                        // 현재 접속중인 isReady() 상태의 클라이언트들을 카운트하고
+                        // typeName을 지속적으로 갱신
                         Message tempMsg = msg;
-                        int typeIdx = 0;
                         panelState = msg.getPanelState();
+                        int typeIdx = server.checkPanelStateAndTypeName(tempMsg);
+                        // 단어타입 index 설정
+                        tempMsg.getAcidrain().setTypeidx(typeIdx);
+
+                        tempMsg = selectWords(tempMsg.getAcidrain());
+                        System.out.println("selectWord -> tempMsg");
+
+                        //
+                        server.createDrawWordList(tempMsg.getList());
+                        server.sendDrawWordListToAll();
+                        break;
                 }
             }
         }catch (IOException e){

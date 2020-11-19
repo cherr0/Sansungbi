@@ -1,4 +1,4 @@
-package network;
+package server;
 
 import GUI.ClientPanel;
 import VO.AcidRain;
@@ -22,6 +22,43 @@ public class DBServer {
 
     ServerSocket ss;
     Socket s;
+
+
+    public DBServer() {
+        ss = null;
+        s = null;
+        try{
+            ss = new ServerSocket(12345);
+            System.out.println("서버 생성 성공!");
+        }catch (IOException e) {
+            System.out.println("서버 소켓 에러: " + e);
+            return; // 서버 소켓 생성 실패 시 메소드 종료
+        }
+
+
+        while(true) {
+            User user = null;
+            String remoteIP = "";
+            try{
+                System.out.println("서버 접속 대기중");
+                s = ss.accept();
+                remoteIP = s.getInetAddress().getHostAddress();
+
+                System.out.println(remoteIP + "가 서버에 접속했습니다.");
+
+
+                // 통신 스레드
+                user = new User(this, s);
+                userList.add(user);     // 리스트에 유저 추가
+                user.start();           // 스레드 하나 만들었으니 시작
+
+            }catch(IOException e){
+                System.out.println("소켓 생성 실패" + e);
+            }
+        }
+
+    }
+
 
     // 접속한 유저리스트 받아옴
     public String getUserList() {
@@ -50,6 +87,7 @@ public class DBServer {
 
         for(int i=0 ; i< list.size() ; i++) {
             xCoord = random.nextInt(450);
+            // 0~450 사이 x 좌표값 랜덤하게 설정
             yCoord = random.nextInt(600)-600;
             // 화면 제일 위에서 보여줘야 하지만 떨어지는 순서는 랜덤이기 때문에 -600 지정
             deltaY = random.nextInt(10) + 15 * currentLevel;
@@ -120,42 +158,7 @@ public class DBServer {
         return typeIdx;
     }
 
-
-
-    public DBServer() {
-        ss = null;
-        s = null;
-        try{
-            ss = new ServerSocket(12345);
-            System.out.println("서버 생성 성공!");
-        }catch (IOException e) {
-            System.out.println("서버 소켓 에러: " + e);
-            return; // 서버 소켓 생성 실패 시 메소드 종료
-        }
-
-
-        while(true) {
-            User user = null;
-            String remoteIP = "";
-            try{
-                System.out.println("서버 접속 대기중");
-                s = ss.accept();
-                remoteIP = s.getInetAddress().getHostAddress();
-
-                System.out.println(remoteIP + "가 서버에 접속했습니다.");
-
-
-                // 통신 스레드
-                user = new User(this, s);
-                userList.add(user);     // 리스트에 유저 추가
-                user.start();           // 스레드 하나 만들었으니 시작
-
-            }catch(IOException e){
-                System.out.println("소켓 생성 실패" + e);
-            }
-        }
-
-
-
+    public static void main(String[] args){
+        new DBServer();
     }
 }

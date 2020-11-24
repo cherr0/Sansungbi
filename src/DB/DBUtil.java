@@ -17,12 +17,12 @@ public class DBUtil {
 	public static Connection connDB() {
 		try {
 			Class.forName(driver);
-			System.out.println("Oracle µå¶óÀÌ¹ö ·Îµù ¼º°ø");
+			System.out.println("Oracle ë“œë¼ì´ë²„ ë¡œë”© ì„±ê³µ");
 			Connection conn = DriverManager.getConnection(url, user, pwd);
-			System.out.println("Connection »ı¼º ¼º°ø");
+			System.out.println("Connection ìƒì„± ì„±ê³µ");
 			return conn;
 		}catch(Exception e) {
-			System.out.println("Á¢¼Ó¿¡ ½ÇÆĞÇß½À´Ï´Ù. ");
+			System.out.println("DB ì ‘ì†ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤. ");
 			e.printStackTrace();
 		}
 		return null;

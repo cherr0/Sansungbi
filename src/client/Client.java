@@ -113,7 +113,7 @@ public class Client {
 
         // 서버 소켓 연동
         Message msg = new Message();
-        msg.setType(0);     // 0 : 서버에 유저 등록 메세지 타입
+        msg.setType(0);             // 0 : 서버에 유저 등록 메세지 타입
         msg.setAcidrain(rain);      // 유저의 이름 정보가 담겨있는 AcidRain 객체 메세지에 담아 전송
 
         try {

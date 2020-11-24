@@ -26,7 +26,7 @@ public class RainDAO {
 	String selectTypeName;
 	
 	
-	// À¯Àú µî·Ï
+	// ìœ ì € ë“±ë¡
 	public void insertUser(AcidRain acidrain) {
 		
 		Connection conn = null;
@@ -38,13 +38,13 @@ public class RainDAO {
 			pstmt.setString(1, acidrain.getUsername());
 			pstmt.setString(2, acidrain.getIp());
 			
-			// execute´Â DDLÇÒ ¶§ »ç¿ë
+			// executeëŠ” DDLí•  ë•Œ ì‚¬ìš©
 			// execute query  : select
 			// execute update : insert, delete, update
 			
 			int cnt = pstmt.executeUpdate();
-			System.out.println("insert : " + (cnt == 1 ? "¼º°ø" : "½ÇÆĞ"));
-			// insert ¼º°ø ½Ã 1, ¾Æ´Ï¸é 0
+			System.out.println("insert : " + (cnt == 1 ? "ì„±ê³µ" : "ì‹¤íŒ¨"));
+			// insert ì„±ê³µ ì‹œ 1, ì•„ë‹ˆë©´ 0
 			
 		}catch (SQLException e) {
 			System.out.println("insertSQL error : " + e);
@@ -54,7 +54,7 @@ public class RainDAO {
 	}
 	
 	// select words
-	// ÃßÈÄ ÇÊ¿äÇÏ¸é ¸Ş¼Òµå »ı¼º
+	// ì¶”í›„ í•„ìš”í•˜ë©´ ë©”ì†Œë“œ ìƒì„±
 	public Message selectWords(AcidRain acidrain) {
 		
 		Message msg = null;
@@ -64,7 +64,7 @@ public class RainDAO {
 	}
 	
 	
-	// °ÔÀÓÀÌ ³¡³­ ÈÄ À¯Àú ½ºÄÚ¾î µî·Ï
+	// ê²Œì„ì´ ëë‚œ í›„ ìœ ì € ìŠ¤ì½”ì–´ ë“±ë¡
 	public void updateUserScore(AcidRain acidrain) {
 		
 		Connection conn = null;
@@ -82,7 +82,7 @@ public class RainDAO {
 		}
 	}
 	
-	// À¯Àú ÀÌ¸§ µî·Ï ÈÄ ´ÙÀ½¿¡´Â ÀÌ¸§ ¾÷µ¥ÀÌÆ®
+	// ìœ ì € ì´ë¦„ ë“±ë¡ í›„ ë‹¤ìŒì—ëŠ” ì´ë¦„ ì—…ë°ì´íŠ¸
 	public void updateUserName(AcidRain acidrain, String oldName) {
 		
 		Connection conn = null;
@@ -95,7 +95,7 @@ public class RainDAO {
 			pstmt.setString(2, oldName);
 			
 			int resultCnt = pstmt.executeUpdate();
-			System.out.println("nameupdate " + (resultCnt == 1 ? "¾÷µ¥ÀÌÆ® ¼º°ø" : "¾÷µ¥ÀÌÆ® ½ÇÆĞ"));
+			System.out.println("nameupdate " + (resultCnt == 1 ? "ì—…ë°ì´íŠ¸ ì„±ê³µ" : "ì—…ë°ì´íŠ¸ ì‹¤íŒ¨"));
 		}catch(SQLException e) {
 			System.out.println("updateUserName err : " + e);
 		}finally {
@@ -104,8 +104,8 @@ public class RainDAO {
 	}
 	
 	
-	// ÃßÈÄ ¼öÁ¤
-	// ±âÁ¸ : ¼­¹ö¿¡¼­ À¯Àú°¡ ³ª°¥ ½Ã À¯Àú delete
+	// ì¶”í›„ ìˆ˜ì •
+	// ê¸°ì¡´ : ì„œë²„ì—ì„œ ìœ ì €ê°€ ë‚˜ê°ˆ ì‹œ ìœ ì € delete
 	public void deleteUser(AcidRain acidrain) {
 		
 		Connection conn = null;
@@ -118,7 +118,7 @@ public class RainDAO {
 			
 			int cnt = pstmt.executeUpdate();
 			
-			System.out.println("delete " + (cnt == 1 ? "À¯Àú »èÁ¦ ¼º°ø" : "À¯Àú »èÁ¦ ½ÇÆĞ"));
+			System.out.println("delete " + (cnt == 1 ? "ìœ ì € ì‚­ì œ ì„±ê³µ" : "ìœ ì € ì‚­ì œ ì‹¤íŒ¨"));
 			
 			
 		} catch(Exception e) {
@@ -153,9 +153,9 @@ public class RainDAO {
 			while(rs.next()) {
 				rain = new AcidRain();
 				rain.setTypename(rs.getString(1));
-				list.add(rain);		// ¸®½ºÆ®¿¡ Ãß°¡
-				System.out.println("ÀÎµ¦½º ÀÌ¸§ : " + rain.getTypeidx());
-				System.out.println("Å¸ÀÔ ÀÌ¸§ : " + rain.getTypename());
+				list.add(rain);		// ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
+				System.out.println("ì¸ë±ìŠ¤ ì´ë¦„ : " + rain.getTypeidx());
+				System.out.println("íƒ€ì… ì´ë¦„ : " + rain.getTypename());
 			}
 			
 			msg.setList(list);

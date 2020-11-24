@@ -176,12 +176,15 @@ public class User extends Thread {
             while(onAir){
                 msg = (Message) ois.readObject();
                 msgType = msg.getType();
+                System.out.println("msgType: " + msgType);
 
                 switch(msgType){
                     case 0:     // 유저 등록
                         insertUser(msg.getAcidrain());
                         System.out.println("유저 DB에 등록 성공");
                         server.sendUserListToAll();     // 유저 리스트 갱신
+                        break;
+
                     case 1:
                         // 현재 접속중인 isReady() 상태의 클라이언트들을 카운트하고
                         // typeName을 지속적으로 갱신
@@ -197,6 +200,34 @@ public class User extends Thread {
                         //
                         server.createDrawWordList(tempMsg.getList());
                         server.sendDrawWordListToAll();
+                        break;
+                    case 2:     // 유저 스코어 등록 (추후 구현)
+                        updateUserScore(msg.getAcidrain());
+                        break;
+                    case 22:
+                        updateUserName(msg.getAcidrain(), msg.getNameString());
+                        server.sendUserListToAll();
+                        break;
+                    case 3:
+                        deleteUser(msg.getAcidrain());
+                        break;
+                    case 4:
+                        selectWordTypeName(msg.getAcidrain());
+                        server.sendUserListToAll();
+                        break;
+                    case 9:
+                        server.exitUser(this);
+                        server.sendUserListToAll();
+                        onAir = false;      // while을 벗어나야 catch에 걸리지 않음
+                        break;
+                    case 33:    // 패널의 state값 받아옴
+                        panelState = msg.getPanelState();
+                        break;
+                    case 34:
+                        // 여기서 단어를 각각 클라이언트로 쏴주는데
+                        // synchronized를 활용하여 값에 접근중이면 기다리도록 처리
+                        entryTemp = msg.getEntryString();
+                        server.sendInputEntryToAll(entryTemp);
                         break;
                 }
             }

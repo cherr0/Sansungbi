@@ -8,8 +8,6 @@ import java.awt.*;
 
 public class EPanel extends JPanel {
 
-    private MyListener ml = new MyListener(this);
-
     public JPanel listPanel, playerPanel, typePanel, startPanel;    // 유저목록 패널, 게임 타입 확인 패널, 게임시작 패널
     public JTextArea userList, typeList;               // 접속한 유저목록, 단어 타입 목록
     public JTextField typeSelect;                      // 단어 타입 선택
@@ -19,7 +17,7 @@ public class EPanel extends JPanel {
     Border border = BorderFactory.createLineBorder(new Color(230,230,238),7);
 
 
-   public EPanel() {
+   public EPanel(MyListener ml) {
        setLayout(new BorderLayout());
 
        //플레이어 리스트 패널

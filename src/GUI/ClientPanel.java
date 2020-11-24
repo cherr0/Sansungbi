@@ -2,6 +2,7 @@ package GUI;
 
 import VO.DrawWord;
 import client.Client;
+import client.MyListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,14 +63,15 @@ public class ClientPanel extends JPanel {
 
         String str = "";
 
-        //
+        // 단어 리스트에 단어 저장
         for(int i=0 ; i < this.drawList.size() ; i++) {
             str = this.drawList.get(i).getText();
             wordList.add(str);
         }
 
+        // 단어 리스트가 채워졌다면 패널을 시작가능 상태로 변경
         if(!wordList.isEmpty()){
-//            panelState = PANEL_STATE_START_SIGN_FIRED;
+            panelState = PANEL_STATE_START_SIGN_FIRED;
             System.out.println("panelState: " + panelState);
         }
         System.out.println("drawList 길이: " + this.drawList.size());

@@ -15,10 +15,9 @@ public class NPanel extends JPanel {
     public JTextField tfUsername; // 유저 이름 등록란
     public JButton signUp;        // 게임 스타트, 서버에 이름 등록
 
-    public NPanel() {
+    public NPanel(MyListener ml) {
         setLayout(new BorderLayout());
         JPanel wordPanel = new JPanel(new BorderLayout());
-        MyListener ml = new MyListener(this);
 
         tfUsername = new JTextField();
 
@@ -29,8 +28,8 @@ public class NPanel extends JPanel {
         wordPanel.add(tfUsername, BorderLayout.CENTER);
 
         // 유저 등록 버튼 생성
-        signUp = new JButton("Sign");
-        signUp.setActionCommand("Sign");
+        signUp = new JButton("sign");
+        signUp.setActionCommand("sign");
         signUp.addActionListener(ml); // 나중에 리스너 연결
 
 

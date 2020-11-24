@@ -180,6 +180,8 @@ public class User extends Thread {
                 switch(msgType){
                     case 0:     // 유저 등록
                         insertUser(msg.getAcidrain());
+                        System.out.println("유저 DB에 등록 성공");
+                        server.sendUserListToAll();     // 유저 리스트 갱신
                     case 1:
                         // 현재 접속중인 isReady() 상태의 클라이언트들을 카운트하고
                         // typeName을 지속적으로 갱신

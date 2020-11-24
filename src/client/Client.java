@@ -17,9 +17,9 @@ import java.util.ArrayList;
 
 public class Client {
 
-    private MyFrame f;                                    // 기본 프레임
-    private ClientPanel cp;
-    private EPanel ep;
+    public MyFrame f;                        // 기본 프레임
+    public MyListener ml;
+
     String title = "산성비";
 
     // 클라이언트별 Info
@@ -27,7 +27,7 @@ public class Client {
     private String name;            // 이름
     private String oldName;         // 변경 시 이전 이름
     private int nameChange = 1;     // 첫 접속 후 이름 등록 시에는 삽입, 그 이후는 변경
-    private int mtState;            // 현재 상태 표시
+    private int myState;            // 현재 상태 표시
     private int myidx = 0;          // 서버에서 자신의 번호
 
 
@@ -42,10 +42,9 @@ public class Client {
 
 
     // 통신 관련 변수
-    // 추후 사용 예정
     private Socket s;
-    private ObjectInputStream ois;
-    private ObjectOutputStream oos;
+    public ObjectInputStream ois;
+    public ObjectOutputStream oos;
 
     // 단어 받아오는 리스트
     ArrayList<AcidRain> rList;
@@ -57,39 +56,162 @@ public class Client {
 
     // 생성자
     public Client() {
+
         setGUI(); // 객체 생성 시 GUI 셋팅
+        System.out.println("GUI 셋팅 완료");
 
         try{
+            s = new Socket(getLocalIP(),5050);
+            oos = new ObjectOutputStream(s.getOutputStream());
+            oos.flush();    // 출력 스트림을 비움
+            ois = new ObjectInputStream(s.getInputStream());
+            System.out.println("입출력 셋팅 완료");
+//            selectWordTypeName();   // wordType 가져와서 넣어줌
+
+            System.out.println("readerThread 시작 전");
+            new ReaderThreadClient(this,ois).start();
+            System.out.println("readerThread 시작 완료");
+
+            myState = Message.IS_CONNECTED;
 
         }catch (Exception e){
             System.out.print("클라이언트 접속 오류: " + e);
         }
     }
 
-    // 추후 연결
+
     void setGUI() {
-        MyFrame f = new MyFrame(title);
+        f = new MyFrame(this, title);
     }
 
-    void insertUser() {
-        // 입력한 유저이름을 가져옴
-        f.nPanel.tfUsername.getText();
+    void updateUserScore() {
 
+    }
+
+    public void nameInsertUpdate() {
+        String name = f.nPanel.tfUsername.getText().trim(); // 입력한 이름 가져옴
+        System.out.println("이름 받아옴 " + name);
+        switch (nameChange) {
+            case 0:     // 두번째부터 update
+                rename(name);   // 실제 클라이언트 이름 변경
+                updateUserName(name);   // 리스트 변경
+                break;
+            case 1:     // 이름을 받아와서 처음이면 insert
+                insertUser(name);
+                nameChange = 0;
+                break;
+        }
+    }
+
+
+
+    void insertUser(String name) {
         AcidRain rain = new AcidRain();
         rain.setUsername(name);
         rain.setIp(getLocalIP());
+        this.name = name;
 
         // 서버 소켓 연동
         Message msg = new Message();
-        msg.setType(0);
-        msg.setAcidrain(rain);
+        msg.setType(0);     // 0 : 서버에 유저 등록 메세지 타입
+        msg.setAcidrain(rain);      // 유저의 이름 정보가 담겨있는 AcidRain 객체 메세지에 담아 전송
 
         try {
-            oos.writeObject(msg);
-            System.out.println("전송 성공");
+            oos.writeObject(msg);       // 담겨진 msg 객체를 서버로 보냄
+            System.out.println("이름 전송 성공");
         }catch(IOException e) {
             System.out.println("유저 이름 전송 오류: " + e);
         }
+    }
+
+    void rename(String newName) {
+        if(name.isEmpty()) return;
+        oldName = name;
+        name = newName;
+        System.out.println("바꾸기 전 이름 : " + oldName);
+        System.out.println("바뀐 이름 : " + name);
+
+        updateUserName(name);
+        setFrameName(name);
+    }
+
+    // 유저 이름 업데이트
+    void updateUserName(String newName) {
+        if(users.isEmpty()) return; //비어있으면 리턴
+        System.out.println("화면상에서 newName으로 바꾼다");
+        System.out.println("newName 바꾸기 전 구이름: " + oldName);
+        for(int i=0 ; i< users.size() ; i++){
+            if(users.get(i).equals(oldName)){
+                users.set(i, newName);
+            }
+        }
+    }
+
+    public void setFrameName(String name){
+        this.name = name;
+    }
+
+
+    // ip 얻어오기
+    public String getLocalIP() {
+
+        String localIP = "127.0.0.1";
+
+        try {
+            localIP = InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            System.out.println("Local IP 얻기 실패" + e);
+        }
+
+        return localIP;
+
+    }
+
+    // 게임 시작 준비
+    void isReady() {
+        f.cPanel.setPanelState(ClientPanel.PANEL_STATE_ISREADY);
+        System.out.println("isReady() 메소드 시작");
+
+        try{
+            Thread.sleep(1000);
+        }catch(InterruptedException e){
+            System.out.println("isReady sleep err:" + e);
+        }
+
+        // 애니메이션 시작 flag
+        f.cPanel.onOffThread();
+
+        f.ePanel.start.setEnabled(false);
+    }
+
+    // 텍스트 입력을 받아온 후 비교하러 전송
+    public void matchWord(String inputEntry){
+        f.cPanel.matchWord(inputEntry);
+    }
+
+    // 단어 입력
+    void enterWords() {
+        // 입력란에 입력한 단어 가져오기
+        String input = f.sPanel.tfEntry.getText();
+
+        if(input == null){
+            f.sPanel.tfEntry.setText("");
+            return;
+        }
+        System.out.println("단어 입력 Check,input : " + input);
+        Message msg = new Message();
+        msg.setType(34);
+        System.out.println("입력단어 서버로 보내는 중");
+        msg.setEntryString(input);
+
+        try{
+            oos.writeObject(msg);
+        }catch(IOException e){
+            System.out.println("entryMsg send err : " + e);
+        }
+
+        // 단어 전송했으면 비워주기
+        f.sPanel.tfEntry.setText("");
     }
 
     void selectWords() {
@@ -112,7 +234,7 @@ public class Client {
         Message msg = new Message();
         msg.setType(1);
         msg.setAcidrain(acidRain);
-        msg.setPanelState(cp.getPanelState());
+        msg.setPanelState(f.cPanel.getPanelState());
         System.out.println("msg의 typeidx: " + msg.getAcidrain().getTypeidx());
 
         try{
@@ -123,30 +245,7 @@ public class Client {
         }
     }
 
-    void updateUserScore() {
 
-    }
-
-    void updateUserName() {
-        // 유저 이름 업데이트
-        AcidRain acidRain = new AcidRain();
-        acidRain.setUsername(name);
-        System.out.println("");
-    }
-    // localhost ip 얻어오기
-    public String getLocalIP() {
-
-        String localIP = "127.0.0.1";
-
-        try {
-            localIP = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            System.out.println("Local IP 얻기 실패" + e);
-        }
-
-        return localIP;
-
-    }
 
     // 게임 시에 사용할 단어 타입 설정
     void selectWordTypeName() {
@@ -195,7 +294,7 @@ public class Client {
     // start 버튼 활성화
     public void gameIsOver(){
         JOptionPane.showConfirmDialog(f, "Round Over","Weak Acid Rain Alert", JOptionPane.INFORMATION_MESSAGE);
-        ep.start.setEnabled(true);
+        f.ePanel.start.setEnabled(true);
     }
 
     public void printOnMyConsole(String s){

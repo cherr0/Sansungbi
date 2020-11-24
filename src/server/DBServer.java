@@ -28,7 +28,7 @@ public class DBServer {
         ss = null;
         s = null;
         try{
-            ss = new ServerSocket(12345);
+            ss = new ServerSocket(5050);
             System.out.println("서버 생성 성공!");
         }catch (IOException e) {
             System.out.println("서버 소켓 에러: " + e);

@@ -1,6 +1,7 @@
 package client;
 
 import GUI.*;
+import VO.AcidRain;
 import VO.Message;
 
 import java.awt.event.ActionEvent;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 public class MyListener implements ActionListener {
 
     MyFrame f;
+    Client c;
     ClientPanel cp;
     EPanel ep;
     SPanel sp;
@@ -27,24 +29,23 @@ public class MyListener implements ActionListener {
     private ArrayList<String> wordList = new ArrayList<String>();
     private ThreadTest ttest;
 
+    public MyListener(Client c, ObjectInputStream ois, ObjectOutputStream oos) {
+
+    }
+
     public MyListener(ClientPanel cp) {
         this.cp = cp;
     }
 
-    public MyListener(EPanel ep){
-        this.ep = ep;
-    }
-
-    public MyListener(SPanel sp){
-        this.sp = sp;
-    }
-
-    public MyListener(NPanel np){
-        this.np = np;
-    }
-
     public MyListener(MyFrame f){
+        this.c = f.client;
         this.f = f;
+        this.cp = f.cPanel;
+        this.ep = f.ePanel;
+        this.sp = f.sPanel;
+        this.np = f.nPanel;
+        this.ois = c.ois;
+        this.oos = c.oos;
     }
 
     @Override
@@ -55,56 +56,17 @@ public class MyListener implements ActionListener {
          switch(cmd){
              case "chat" :
                  break;
-             case "Start":
-                 isReady();
+             case "start":
+                 c.isReady();
+                 break;
+             case "enter":
+                 c.enterWords();
+                 break;
+             case "sign":
+                 System.out.println("sign 버튼 입력 받음");
+                 c.nameInsertUpdate();
                  break;
          }
     }
-
-    // 게임 시작 준비
-    void isReady() {
-        cp.setPanelState(ClientPanel.PANEL_STATE_ISREADY);
-        System.out.println("isReady() 메소드 시작");
-
-        try{
-            Thread.sleep(1000);
-        }catch(InterruptedException e){
-            System.out.println("isReady sleep err:" + e);
-        }
-
-        // 애니메이션 시작 flag
-        cp.onOffThread();
-
-        ep.start.setEnabled(false);
-    }
-
-    void enterWords() {
-        // 입력란에 입력한 단어 가져오기
-        String input = sp.tfEntry.getText();
-
-        if(input == null){
-            sp.tfEntry.setText("");
-            return;
-        }
-        System.out.println("단어 입력 Check,input : " + input);
-        Message msg = new Message();
-        msg.setType(34);
-        System.out.println("입력단어 서버로 보내는 중");
-        msg.setEntryString(input);
-
-        try{
-            oos.writeObject(msg);
-        }catch(IOException e){
-            System.out.println("entryMsg send err : " + e);
-        }
-
-        // 단어 전송했으면 비워주기
-        sp.tfEntry.setText("");
-    }
-
-
-    // 단어 맞는지 확인
-    public void matchWord(String input){
-        cp.matchWord(input);
-    }
 }
+

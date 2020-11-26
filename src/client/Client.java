@@ -1,9 +1,9 @@
 package client;
 
 import GUI.ClientPanel;
-import GUI.EPanel;
 import GUI.MyFrame;
 import VO.AcidRain;
+import VO.DrawWord;
 import VO.Message;
 
 import javax.swing.*;
@@ -94,20 +94,21 @@ public class Client {
         switch (nameChange) {
             case 0:     // 두번째부터 update
                 rename(name);   // 실제 클라이언트 이름 변경
-                updateUserName(name);   // 리스트 변경
+                updateUser();   // 리스트 변경
                 break;
             case 1:     // 이름을 받아와서 처음이면 insert
                 insertUser(name);
                 nameChange = 0;
                 break;
         }
+
     }
 
 
 
     void insertUser(String name) {
         AcidRain rain = new AcidRain();
-        rain.setUsername(name);
+        rain.setName(name);     // 현재 이름 지정
         rain.setIp(getLocalIP());
         this.name = name;
 
@@ -124,6 +125,26 @@ public class Client {
         }
     }
 
+    // 유저 이름 업데이트
+    void updateUser() {
+        AcidRain rain = new AcidRain();
+        rain.setName(name);
+        System.out.println("DB로 보내기전 name: " + name + ", oldName: " + oldName );
+
+        Message msg = new Message();
+        msg.setType(22);
+        msg.setAcidrain(rain);
+        msg.setNameString(oldName);
+
+        try{
+            oos.writeObject(msg);
+            System.out.println("updateUserName MSG sent well");
+
+        }catch(IOException e){
+            System.out.println("updateUserName MSG sent error: " + e);
+        }
+    }
+
     void rename(String newName) {
         if(name.isEmpty()) return;
         oldName = name;
@@ -131,20 +152,22 @@ public class Client {
         System.out.println("바꾸기 전 이름 : " + oldName);
         System.out.println("바뀐 이름 : " + name);
 
-        updateUserName(name);
-        setFrameName(name);
+        updateUserName(name);   // DB 상의 이름 변경
+        setFrameName(name);     // 객체에 저장된 이름 변경
     }
 
-    // 유저 이름 업데이트
+    // 내부 유저이름 변경
     void updateUserName(String newName) {
-        if(users.isEmpty()) return; //비어있으면 리턴
-        System.out.println("화면상에서 newName으로 바꾼다");
+        if(users.isEmpty()) return;	// 텅빔이면 걍 나감
+        System.out.println("화면상에서 newName 으로 바꾼다");
         System.out.println("newName 바꾸기 전 구이름: " + oldName);
-        for(int i=0 ; i< users.size() ; i++){
+        for(int i = 0; i < users.size(); i++){
             if(users.get(i).equals(oldName)){
                 users.set(i, newName);
             }
         }
+        System.out.println("화면상에서 newName 으로 바꿨다");
+
     }
 
     public void setFrameName(String name){
@@ -183,6 +206,25 @@ public class Client {
 
         f.ePanel.start.setEnabled(false);
     }
+
+    // Panel에 보낼 것
+    public void sendPanelDrawWordList(ArrayList<DrawWord> dwList){
+        System.out.println("서버에서 dwList를 받았다 3");
+        f.cPanel.setDrawList(dwList);
+        // dwList를 보내면 panel의 state를 received로 바꾼다
+        // 그리고 그걸 서버로 보낸다
+        // 서버에서 모든 user들의 panelState가 received면 start로 state를 바꿔준다
+        // 그래야 시작 가능
+
+    }
+
+    public void sendPanelStateToServer(int panelState){
+        Message msg = new Message();
+        msg.setType(33);
+        msg.setPanelState(panelState);
+    }
+
+
 
     // 텍스트 입력을 받아온 후 비교하러 전송
     public void matchWord(String inputEntry){
@@ -245,7 +287,17 @@ public class Client {
         }
     }
 
+    public void showUserList(String[] nameList){
+        f.ePanel.userList.setText("");
+        String[] list = nameList;
+        for(String name : list){
+            f.ePanel.userList.append(name + "\n");
+        }
+    }
 
+    public void setPanelState(int panelState) {
+        f.cPanel.setPanelState(panelState);
+    }
 
     // 게임 시에 사용할 단어 타입 설정
     void selectWordTypeName() {

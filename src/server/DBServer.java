@@ -42,7 +42,7 @@ public class DBServer {
             try{
                 System.out.println("서버 접속 대기중");
                 s = ss.accept();
-                remoteIP = s.getInetAddress().getHostAddress();
+                remoteIP = s.getInetAddress().getHostAddress(); // IP 가져옴
 
                 System.out.println(remoteIP + "가 서버에 접속했습니다.");
 
@@ -62,6 +62,7 @@ public class DBServer {
 
     // 접속한 유저리스트 받아옴
     public String getUserList() {
+        if(userList.isEmpty()) return "";
         String list = "";
         StringBuilder sb = new StringBuilder();
 
@@ -69,9 +70,11 @@ public class DBServer {
             sb.append(ur.name).append(",");
         }
 
-        list = sb.toString();
-        list.substring(0, list.length()-1 );
 
+
+        list = sb.toString();
+        list = list.substring(0, list.length()-1 );
+//        System.out.println(list);
         return list;
     }
 

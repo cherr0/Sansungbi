@@ -115,21 +115,22 @@ public class User extends Thread {
     //============ C R U D =============//
     // Create, Read, Update, Delete
 
-    // 이름 변경 (최초 1회 등록 이후, 등록 대신 변경
+    // 이름 변경 (최초 1회 등록 이후, 등록 대신 변경)
     void changeName(AcidRain acidRain) {
-        this.name = acidRain.getUsername();
+        this.name = acidRain.getName();
     }
 
     // 유저 등록
     void insertUser(AcidRain acidRain) {
-        dao.insertUser(acidRain);
+        dao.insertUser(acidRain);       // 서버 내 DB sql문 실행
 
-        changeName(acidRain);
+        changeName(acidRain);           // 클라이언트에서 받아온 이름 지정
+
     }
 
     // 이름 변경
     void updateUserName(AcidRain acidRain, String oldName) {
-        dao.updateUserName(acidRain, oldName);
+        dao.updateUser(acidRain, oldName);
 
         changeName(acidRain);
     }
@@ -155,22 +156,25 @@ public class User extends Thread {
     }
 
 
-    void selectWordTypeName(AcidRain acidRain) {
-        Message msg = dao.selectWordTypeName(acidRain);
-
-        try{
-            oos.writeObject(msg);
-            System.out.println("리스트 사이즈 : " + msg.getList().size());
-        }catch(IOException e){
-            System.out.println("서버에서 받아온 typename 에러 : " + e );
-        }
-    }
+//    void selectWordTypeName(AcidRain acidRain) {
+//        Message msg = dao.selectWordTypeName(acidRain);
+//
+//        try{
+//            oos.writeObject(msg);
+//            System.out.println("리스트 사이즈 : " + msg.getList().size());
+//        }catch(IOException e){
+//            System.out.println("서버에서 받아온 typename 에러 : " + e );
+//        }
+//    }
 
     // ====== 스레드 실행 메소드 ======= //
     public void run() {
         Message msg = null;
         int msgType = 0;
         String entryTemp = "";
+
+        server.sendUserList(this);
+        server.sendUserListToAll();
 
         try{
             while(onAir){
@@ -180,6 +184,7 @@ public class User extends Thread {
 
                 switch(msgType){
                     case 0:     // 유저 등록
+                        System.out.println("msgType: 유저 등록");
                         insertUser(msg.getAcidrain());
                         System.out.println("유저 DB에 등록 성공");
                         server.sendUserListToAll();     // 유저 리스트 갱신
@@ -196,7 +201,6 @@ public class User extends Thread {
 
                         tempMsg = selectWords(tempMsg.getAcidrain());
                         System.out.println("selectWord -> tempMsg");
-
                         //
                         server.createDrawWordList(tempMsg.getList());
                         server.sendDrawWordListToAll();
@@ -204,19 +208,20 @@ public class User extends Thread {
                     case 2:     // 유저 스코어 등록 (추후 구현)
                         updateUserScore(msg.getAcidrain());
                         break;
-                    case 22:
-                        updateUserName(msg.getAcidrain(), msg.getNameString());
+                    case 22:    // 유저 이름 변경
+                       updateUserName(msg.getAcidrain(), msg.getNameString());
                         server.sendUserListToAll();
                         break;
                     case 3:
                         deleteUser(msg.getAcidrain());
                         break;
-                    case 4:
-                        selectWordTypeName(msg.getAcidrain());
-                        server.sendUserListToAll();
-                        break;
+//                    case 4:
+//                        selectWordTypeName(msg.getAcidrain());
+//                        server.sendUserListToAll();
+//                        break;
                     case 9:
                         server.exitUser(this);
+                        System.out.println(name + "유저 퇴장");
                         server.sendUserListToAll();
                         onAir = false;      // while을 벗어나야 catch에 걸리지 않음
                         break;

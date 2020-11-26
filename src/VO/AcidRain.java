@@ -12,12 +12,21 @@ public class AcidRain implements Serializable {
 	private boolean wordflag;	// 단어 삭제 flag
 	private String typename;	// 단어 타입
 	
-	private String username;	// 사용자
+	private String name;		// 사용자
+	private String oldName;		// 사용자의 이전 이름
 	private String ip;			// user ip
 
 	
 	/* ------ getter, setter ------ */
-	
+
+	public String getOldName() {
+		return oldName;
+	}
+
+	public void setOldName(String oldName) {
+		this.oldName = oldName;
+	}
+
 	public int getWordidx() {
 		return wordidx;
 	}
@@ -66,12 +75,12 @@ public class AcidRain implements Serializable {
 		this.typename = typename;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getName() {
+		return name;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public static long getSerialversionuid() {

@@ -5,14 +5,21 @@ import java.io.Serializable;
 public class Player implements Serializable{
 	
 	private static final long serialVersionUID = 4371292893094964475L;
-	
+
+	private int pno;
 	private String pName;
 	private int pScore;
 	private int pCount;
 	
 	
 	/* ------ getter, setter ------ */
-	
+
+	public int getPno() {
+		return pno;
+	}
+	public void setPno(int pno) {
+		this.pno = pno;
+	}
 	public String getpName() {
 		return pName;
 	}

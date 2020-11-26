@@ -5,6 +5,8 @@ import client.MyListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class MyFrame extends JFrame {
 
@@ -24,6 +26,8 @@ public class MyFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
 
+
+
 		this.client = client;
 		ml = new MyListener(this);
 
@@ -37,6 +41,8 @@ public class MyFrame extends JFrame {
 		add(cPanel, BorderLayout.CENTER);
 		add(ePanel, BorderLayout.EAST);
 		add(sPanel, BorderLayout.SOUTH);
+
+		addWindowListener(new ClosingPopUp(client));
 
 		setVisible(true);
     }

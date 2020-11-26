@@ -2,7 +2,6 @@ package GUI;
 
 import VO.DrawWord;
 import client.Client;
-import client.MyListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +17,7 @@ public class ClientPanel extends JPanel {
     public static int PANEL_STATE_CLOSED = 0;
     public static int PANEL_STATE_OPEN = 1;
     public static int PANEL_STATE_ISREADY = 2;
-    public static int PANEL_STATE_START_SIGN_FIRED = 3;
+    public static int PANEL_STATE_RECEIVED = 3;
     public static int PANEL_STATE_INGAME = 4;
 
     private int panelState = PANEL_STATE_CLOSED;       // 현재 패널 상태
@@ -71,8 +70,9 @@ public class ClientPanel extends JPanel {
 
         // 단어 리스트가 채워졌다면 패널을 시작가능 상태로 변경
         if(!wordList.isEmpty()){
-            panelState = PANEL_STATE_START_SIGN_FIRED;
+            panelState = PANEL_STATE_RECEIVED;
             System.out.println("panelState: " + panelState);
+            client.sendPanelStateToServer(panelState);
         }
         System.out.println("drawList 길이: " + this.drawList.size());
     }
@@ -197,7 +197,7 @@ public class ClientPanel extends JPanel {
         public void run() {
             while(onAir){
                 // 시작 flag는 서버에서 보내줘야 함
-                if(panelState == PANEL_STATE_START_SIGN_FIRED){
+                if(panelState == PANEL_STATE_RECEIVED){
                     // 단어 움직이기
                     drawWords();
 

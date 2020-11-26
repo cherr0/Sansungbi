@@ -12,19 +12,27 @@ import VO.Message;
 public class RainDAO {
 	// DAO : Data Access Object
 	// VO : Value Object
+	/*
+	uno number,
+	name varchar2(30),
+	ip varchar2(30),
+	score number,
+	*/
+
+
+	String insertUserSQL = "insert into users(uno, name, ip) values(users_uno_seq.NEXTVAL, ?, ?)";
+
+	String updateUserSQL = "update users set name = ? where name = ?";
+
+	String selectUserSQL = "select name from users";
+
+	String selectRankSQL; // 추후 랭킹 리스트 가져올 때 사용
 	
-	String insert;
-	
-	String select;
-	
-	String update;
-	
-	String updateName;
-	
-	String delete;
-	
-	String selectTypeName;
-	
+	String updateScoreSQL = "update users set score = score + ? where name = ?";
+
+	String delete = "delete from users where name = ?";
+
+	String selectTypeName = "SELECT typename FROM wordtype WHERE 1 = ?;";
 	
 	// 유저 등록
 	public void insertUser(AcidRain acidrain) {
@@ -34,8 +42,9 @@ public class RainDAO {
 		
 		try {
 			conn = DBUtil.connDB();
-			pstmt = conn.prepareStatement(insert);
-			pstmt.setString(1, acidrain.getUsername());
+			System.out.println(insertUserSQL);
+			pstmt = conn.prepareStatement(insertUserSQL);
+			pstmt.setString(1, acidrain.getName());
 			pstmt.setString(2, acidrain.getIp());
 			
 			// execute는 DDL할 때 사용
@@ -48,6 +57,27 @@ public class RainDAO {
 			
 		}catch (SQLException e) {
 			System.out.println("insertSQL error : " + e);
+		}finally {
+			DBUtil.close(pstmt, conn);
+		}
+	}
+
+	// 유저 이름 등록 후 다음에는 이름 업데이트
+	public void updateUser(AcidRain acidrain,String oldName) {
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = DBUtil.connDB();
+			pstmt = conn.prepareStatement(updateUserSQL);
+			pstmt.setString(1, acidrain.getName());
+			pstmt.setString(2, oldName);
+
+			int resultCnt = pstmt.executeUpdate();
+			System.out.println("nameUpdate " + (resultCnt == 1 ? "업데이트 성공" : "업데이트 실패"));
+		}catch(SQLException e) {
+			System.out.println("updateUser err : " + e);
 		}finally {
 			DBUtil.close(pstmt, conn);
 		}
@@ -74,7 +104,7 @@ public class RainDAO {
 		
 		try {
 			conn = DBUtil.connDB();
-			pstmt = conn.prepareStatement(update);
+			pstmt = conn.prepareStatement(updateScoreSQL);
 		} catch(SQLException e) {
 			System.out.println("UpdateUserScore Err : " + e);
 		} finally {
@@ -82,29 +112,9 @@ public class RainDAO {
 		}
 	}
 	
-	// 유저 이름 등록 후 다음에는 이름 업데이트
-	public void updateUserName(AcidRain acidrain, String oldName) {
-		
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		
-		try {
-			conn = DBUtil.connDB();
-			pstmt = conn.prepareStatement(update);
-			pstmt.setString(1, acidrain.getUsername());
-			pstmt.setString(2, oldName);
-			
-			int resultCnt = pstmt.executeUpdate();
-			System.out.println("nameupdate " + (resultCnt == 1 ? "업데이트 성공" : "업데이트 실패"));
-		}catch(SQLException e) {
-			System.out.println("updateUserName err : " + e);
-		}finally {
-			DBUtil.close(pstmt, conn);
-		}
-	}
+
 	
-	
-	// 추후 수정
+
 	// 기존 : 서버에서 유저가 나갈 시 유저 delete
 	public void deleteUser(AcidRain acidrain) {
 		
@@ -114,7 +124,7 @@ public class RainDAO {
 		try {
 			conn = DBUtil.connDB();
 			pstmt = conn.prepareStatement(delete);
-			pstmt.setString(1, acidrain.getUsername());
+			pstmt.setString(1, acidrain.getName());
 			
 			int cnt = pstmt.executeUpdate();
 			
@@ -130,26 +140,26 @@ public class RainDAO {
 	
 	
 	public Message selectWordTypeName(AcidRain acidrain) {
-		
+
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		ArrayList<AcidRain> list = null;
 		AcidRain rain = null;
 		Message msg = null;
-		
+
 		try {
 			conn = DBUtil.connDB();
 			pstmt = conn.prepareStatement(selectTypeName);
 			pstmt.setString(1, "1");
-			
+
 			ResultSet rs = pstmt.executeQuery();
-			
+
 			System.out.println("resultset: " + (rs == null ? "null" : "not null"));
-			
+
 			msg = new Message();
 			list = new ArrayList<AcidRain>();
-			
+
 			while(rs.next()) {
 				rain = new AcidRain();
 				rain.setTypename(rs.getString(1));
@@ -157,15 +167,15 @@ public class RainDAO {
 				System.out.println("인덱스 이름 : " + rain.getTypeidx());
 				System.out.println("타입 이름 : " + rain.getTypename());
 			}
-			
+
 			msg.setList(list);
-			
+
 		} catch(SQLException e) {
 			System.out.println("selectWordTypeName err : " + e);
 		}finally {
 			DBUtil.close(pstmt, conn);
 		}
-		
+
 		return msg;
 	}
 	

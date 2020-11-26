@@ -58,7 +58,7 @@ public class EPanel extends JPanel {
        typeSelect.setBackground(new Color(232,240,220));
 
        start = new JButton("START GAME");
-       start.setActionCommand("Start");
+       start.setActionCommand("start");
        start.addActionListener(ml);
        start.setBorder(border);
 

@@ -57,9 +57,11 @@ public class MyListener implements ActionListener {
              case "chat" :
                  break;
              case "start":
+                 System.out.println("start 버튼 입력 받음");
                  c.isReady();
                  break;
              case "enter":
+                 System.out.println("enter 버튼 입력 받음");
                  c.enterWords();
                  break;
              case "sign":

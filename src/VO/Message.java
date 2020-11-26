@@ -17,7 +17,7 @@ public class Message implements Serializable{	//직렬화하여 보낼 객체
 	private int type = 0;
 	private AcidRain acidrain;
 
-	//select를 위한 ArrayList보관용
+	//typelist 보관용
 	private ArrayList<AcidRain> list;
 
 	//유저리스트 위한 String 보관용

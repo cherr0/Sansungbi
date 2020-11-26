@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import VO.AcidRain;
 import VO.Message;
@@ -32,7 +33,7 @@ public class RainDAO {
 
 	String delete = "delete from users where name = ?";
 
-	String selectTypeName = "SELECT typename FROM wordtype WHERE 1 = ?;";
+	String selectTypeName = "SELECT typeidx,typename FROM wordtype";
 	
 	// 유저 등록
 	public void insertUser(AcidRain acidrain) {
@@ -138,8 +139,9 @@ public class RainDAO {
 		}
 	}
 	
-	
-	public Message selectWordTypeName(AcidRain acidrain) {
+
+	// 선택 가능한 wordType 다 가져옴
+	public Message selectWordTypeName() {
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -151,23 +153,21 @@ public class RainDAO {
 		try {
 			conn = DBUtil.connDB();
 			pstmt = conn.prepareStatement(selectTypeName);
-			pstmt.setString(1, "1");
 
 			ResultSet rs = pstmt.executeQuery();
 
-			System.out.println("resultset: " + (rs == null ? "null" : "not null"));
-
+			System.out.println("resultSet: " + (rs == null ? "null" : "not null"));
 			msg = new Message();
 			list = new ArrayList<AcidRain>();
 
 			while(rs.next()) {
 				rain = new AcidRain();
-				rain.setTypename(rs.getString(1));
+				rain.setTypeidx(rs.getInt("typeidx"));
+				rain.setTypename(rs.getString("typename"));
 				list.add(rain);		// 리스트에 추가
 				System.out.println("인덱스 이름 : " + rain.getTypeidx());
 				System.out.println("타입 이름 : " + rain.getTypename());
 			}
-
 			msg.setList(list);
 
 		} catch(SQLException e) {

@@ -74,7 +74,7 @@ public class DBServer {
 
         list = sb.toString();
         list = list.substring(0, list.length()-1 );
-//        System.out.println(list);
+        System.out.println(list);
         return list;
     }
 
@@ -119,7 +119,6 @@ public class DBServer {
     }
 
     // 모든 유저에게 해당하는 내용 전송
-    // 추후 사용법 확인할 것
     public void sendMsgToAll(int protocol, String str){
         for(User user : userList){
             user.sendEntryMessage(protocol,str);

@@ -48,7 +48,7 @@ public class User extends Thread {
             ois = new ObjectInputStream( s.getInputStream() );
             oos = new ObjectOutputStream( s.getOutputStream() );
 
-            oos.flush();
+            oos.flush();    // 출력스트림을 비움
         }catch(IOException e){
             System.out.println("User 생성자 오류: " + e);
 
@@ -156,16 +156,16 @@ public class User extends Thread {
     }
 
 
-//    void selectWordTypeName(AcidRain acidRain) {
-//        Message msg = dao.selectWordTypeName(acidRain);
-//
-//        try{
-//            oos.writeObject(msg);
-//            System.out.println("리스트 사이즈 : " + msg.getList().size());
-//        }catch(IOException e){
-//            System.out.println("서버에서 받아온 typename 에러 : " + e );
-//        }
-//    }
+    void selectWordTypeName() {
+        Message msg = dao.selectWordTypeName();
+
+        try{
+            oos.writeObject(msg);
+            System.out.println("리스트 사이즈 : " + msg.getList().size());
+        }catch(IOException e){
+            System.out.println("서버에서 받아온 typename 에러 : " + e );
+        }
+    }
 
     // ====== 스레드 실행 메소드 ======= //
     public void run() {
@@ -215,10 +215,11 @@ public class User extends Thread {
                     case 3:
                         deleteUser(msg.getAcidrain());
                         break;
-//                    case 4:
-//                        selectWordTypeName(msg.getAcidrain());
+                    case 4:
+                        selectWordTypeName();
+                        System.out.println("타입리스트 메소드 실행");
 //                        server.sendUserListToAll();
-//                        break;
+                        break;
                     case 9:
                         server.exitUser(this);
                         System.out.println(name + "유저 퇴장");

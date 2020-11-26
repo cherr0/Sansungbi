@@ -14,6 +14,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Client {
 
@@ -66,7 +67,10 @@ public class Client {
             oos.flush();    // 출력 스트림을 비움
             ois = new ObjectInputStream(s.getInputStream());
             System.out.println("입출력 셋팅 완료");
-//            selectWordTypeName();   // wordType 가져와서 넣어줌
+            Message msg = (Message) ois.readObject();
+            System.out.println(msg.toString());
+            selectWordTypeName();   // wordType 가져와서 넣어줌
+            System.out.println("wordType 셋팅 완료");
 
             System.out.println("readerThread 시작 전");
             new ReaderThreadClient(this,ois).start();
@@ -209,7 +213,7 @@ public class Client {
 
     // Panel에 보낼 것
     public void sendPanelDrawWordList(ArrayList<DrawWord> dwList){
-        System.out.println("서버에서 dwList를 받았다 3");
+        System.out.println("서버에서 dwList를 받았다");
         f.cPanel.setDrawList(dwList);
         // dwList를 보내면 panel의 state를 received로 바꾼다
         // 그리고 그걸 서버로 보낸다
@@ -301,23 +305,23 @@ public class Client {
 
     // 게임 시에 사용할 단어 타입 설정
     void selectWordTypeName() {
-        AcidRain acidrain = new AcidRain();
-        acidrain.setTypeidx(4);
 
         Message msg = new Message();
         msg.setType(4);
-        msg.setAcidrain(acidrain);
 
         String tempR = null;
 
+
         try{
+
             oos.writeObject(msg);   // 보드말고 메세지로 객체화 시켜 보낸다
-            System.out.println("메세지 전송 완료");
+            System.out.println("타입 리스트 요청 완료");
 
             msg = (Message) ois.readObject();
+            System.out.println(msg.toString());
 
             rList = msg.getList();
-            System.out.println("rList is empty?" + (rList == null ? "O" : "X"));
+            System.out.println("rList is empty?" + (rList == null ? " O " : " X "));
 
             for(int i=0 ; i<rList.size() ; i++) {
                 tempR = rList.get(i).getTypename();

@@ -30,7 +30,7 @@ public class NPanel extends JPanel {
         // 유저 등록 버튼 생성
         signUp = new JButton("sign");
         signUp.setActionCommand("sign");
-        signUp.addActionListener(ml); // 나중에 리스너 연결
+        signUp.addActionListener(ml);
 
 
         // 패널에 맞게 입력칸, 버튼 추가

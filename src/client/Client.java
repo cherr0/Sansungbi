@@ -306,6 +306,9 @@ public class Client {
         }
         System.out.println("단어 입력 Check,input : " + input);
         Message msg = new Message();
+        AcidRain rain = new AcidRain();
+        rain.setName(name);
+        msg.setAcidrain(rain);
         msg.setType(34);
         System.out.println("입력단어 서버로 보내는 중");
         msg.setEntryString(input);
@@ -382,7 +385,7 @@ public class Client {
     // 게임이 끝날경우 알리기
     // start 버튼 활성화
     public void gameIsOver(){
-        JOptionPane.showConfirmDialog(f, "Round Over","Weak Acid Rain Alert", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(f, "Round Over","Weak Acid Rain Alert", JOptionPane.INFORMATION_MESSAGE);
         f.ePanel.start.setEnabled(true);
     }
 

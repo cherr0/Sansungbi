@@ -30,17 +30,20 @@ public class SPanel extends JPanel {
         wordBtn = new JButton("ENTER");
         chatBtn = new JButton("ENTER");
         tfEntry = new JTextField();
+        tfEntry.addKeyListener(ml);
         tfChat = new JTextField();
 
         wordBtn.setActionCommand("word");
         chatBtn.setActionCommand("chat");
-        chatBtn.addActionListener(ml); // 추후 수정 예정
+        chatBtn.addActionListener(ml);
         wordBtn.addActionListener(ml);
+
 
         // 단어입력 레이아웃
         wordPanel.add(new JLabel("Write Here >"), BorderLayout.WEST);
         wordPanel.add(tfEntry, BorderLayout.CENTER);
         wordPanel.add(wordBtn, BorderLayout.EAST);
+
 
         // 채팅 레이아웃
         chatPanel.add(new JLabel("Enter Chat >"), BorderLayout.WEST);

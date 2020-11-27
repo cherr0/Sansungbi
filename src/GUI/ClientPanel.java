@@ -119,12 +119,13 @@ public class ClientPanel extends JPanel {
     }
 
     // 리스트 비어있는지 확인
-    public boolean checkEmptyList() {
+    public void checkEmptyList() {
         if(drawList.isEmpty()){
-            System.out.println("리스트 비어있음");
-            return false;
-        }else {
-            return true;
+            System.out.println("단어 리스트 비어있음");
+            repaint();
+            client.gameIsOver();    // 클라이언트를 통해 게임오버 알림 띄우기
+            panelState = PANEL_STATE_OPEN;
+            onAir = false;
         }
     }
 

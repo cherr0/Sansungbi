@@ -48,6 +48,7 @@ public class DBServer {
 
 
                 // 통신 스레드
+                // 하나의 클라이언트마다 하나의 객체 생성
                 user = new User(this, s);
                 userList.add(user);     // 리스트에 유저 추가
                 user.start();           // 스레드 하나 만들었으니 시작
@@ -99,6 +100,7 @@ public class DBServer {
             dwList.add(new DrawWord(xCoord, yCoord,
                     rList.get(i).getWord(), deltaY));
         }
+        System.out.println("createDrawWordList 메소드 실행 끝");
     }
 
     // ready 상태인 클라이언트들에게 drawWordList를 뿌림
@@ -139,9 +141,9 @@ public class DBServer {
         }
     }
 
+
     public int checkPanelStateAndTypeName(Message msg) {
         System.out.println("msg의 typeidx: " + msg.getAcidrain().getTypeidx());
-        int pState = 0;     // panel State
         int userSize = 0;
         int typeIdx = 0;
         for(User user : userList){

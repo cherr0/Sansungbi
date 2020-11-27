@@ -74,7 +74,7 @@ public class ClientPanel extends JPanel {
             System.out.println("panelState: " + panelState);
             client.sendPanelStateToServer(panelState);
         }
-        System.out.println("drawList 길이: " + this.drawList.size());
+        System.out.println("(Client Panel) drawList 길이: " + this.drawList.size());
     }
 
     // 애니메이션 시작 flag
@@ -83,7 +83,7 @@ public class ClientPanel extends JPanel {
             onAir = true;
             at = new AniThread();
 
-            System.out.print("게임 시작");
+            System.out.println("게임 시작");
             at.start();
         }else {
             onAir = !onAir;
@@ -198,6 +198,9 @@ public class ClientPanel extends JPanel {
             while(onAir){
                 // 시작 flag는 서버에서 보내줘야 함
                 if(panelState == PANEL_STATE_RECEIVED){
+                    panelState = PANEL_STATE_INGAME;    // 게임 진행
+                } // if end
+                if(panelState == PANEL_STATE_INGAME){
                     // 단어 움직이기
                     drawWords();
 
@@ -212,7 +215,7 @@ public class ClientPanel extends JPanel {
                     }catch (InterruptedException e){
                         e.printStackTrace();
                     }
-                } // if end
+                }
             } // while end
         } // run() end
     } // class Thread end

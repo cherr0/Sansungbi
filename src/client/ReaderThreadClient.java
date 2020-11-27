@@ -64,6 +64,7 @@ public class ReaderThreadClient extends Thread {
                         client.setPanelState(panelState);
                         break;
                     case 14:
+                        // 다른 유저가 맞춘 단어를 클라이언트의 패널에서 삭제한다
                         inputEntry = msg.getEntryString();
                         client.matchWord(inputEntry);
                         break;

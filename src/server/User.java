@@ -76,7 +76,7 @@ public class User extends Thread {
 
             msg.setType(msgType);
             msg.setEntryString(entry);
-            System.out.println("EntryCheck");
+            System.out.println("EntryCheck entry: " + entry);
             oos.writeObject(msg);
         }catch(IOException e){
             System.out.println("sendEntryMessage Err: " + e);
@@ -227,8 +227,7 @@ public class User extends Thread {
                         panelState = msg.getPanelState();
                         break;
                     case 34:
-                        // 여기서 단어를 각각 클라이언트로 쏴주는데
-                        // synchronized를 활용하여 값에 접근중이면 기다리도록 처리
+                        // 하나의 클라이언트가 답을 전송해서 맞다면 모든 클라이언트에게 전송하여 단어를 삭제한다
                         entryTemp = msg.getEntryString();
                         server.sendInputEntryToAll(entryTemp);
                         break;

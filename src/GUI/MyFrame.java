@@ -22,7 +22,7 @@ public class MyFrame extends JFrame {
 		Rectangle range = new Rectangle(0, 0, 700, 600);
 		setBounds(range);		// 절대값으로 위치 설정
 		setResizable(false);	// 창 크기 조절 불가
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setLayout(new BorderLayout());
 
 

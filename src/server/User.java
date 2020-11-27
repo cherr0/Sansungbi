@@ -148,8 +148,7 @@ public class User extends Thread {
 
     // AcidRain 객체의 word 받아오기
     Message selectWords(AcidRain acidRain) {
-        Message msg = new Message();
-        msg = dao.selectWords(acidRain);
+        Message msg = dao.selectWords(acidRain);
         System.out.println("selectWord 메소드 실행");
 
         return msg;
@@ -173,9 +172,6 @@ public class User extends Thread {
         int msgType = 0;
         String entryTemp = "";
 
-        server.sendUserList(this);
-        server.sendUserListToAll();
-
         try{
             while(onAir){
                 msg = (Message) ois.readObject();
@@ -194,14 +190,12 @@ public class User extends Thread {
                         // 현재 접속중인 isReady() 상태의 클라이언트들을 카운트하고
                         // typeName을 지속적으로 갱신
                         Message tempMsg = msg;
-                        panelState = msg.getPanelState();
-                        int typeIdx = server.checkPanelStateAndTypeName(tempMsg);
-                        // 단어타입 index 설정
-                        tempMsg.getAcidrain().setTypeidx(typeIdx);
-
-                        tempMsg = selectWords(tempMsg.getAcidrain());
+                        panelState = msg.getPanelState();       // isReady() 상태인 클라이언트들의 상태를 가져옴
+                        int typeIdx = server.checkPanelStateAndTypeName(tempMsg);   // 어떤 타입을 선택했는지 알아냄
+                        tempMsg.getAcidrain().setTypeidx(typeIdx);      // 단어타입 index 설정
+                        tempMsg = selectWords(tempMsg.getAcidrain());   // 타입에 맞는 단어 리스트를 넣음
                         System.out.println("selectWord -> tempMsg");
-                        //
+
                         server.createDrawWordList(tempMsg.getList());
                         server.sendDrawWordListToAll();
                         break;
@@ -209,7 +203,7 @@ public class User extends Thread {
                         updateUserScore(msg.getAcidrain());
                         break;
                     case 22:    // 유저 이름 변경
-                       updateUserName(msg.getAcidrain(), msg.getNameString());
+                        updateUserName(msg.getAcidrain(), msg.getNameString());
                         server.sendUserListToAll();
                         break;
                     case 3:
@@ -218,13 +212,16 @@ public class User extends Thread {
                     case 4:
                         selectWordTypeName();
                         System.out.println("타입리스트 메소드 실행");
-//                        server.sendUserListToAll();
                         break;
                     case 9:
                         server.exitUser(this);
                         System.out.println(name + "유저 퇴장");
                         server.sendUserListToAll();
                         onAir = false;      // while을 벗어나야 catch에 걸리지 않음
+                        break;
+
+                    case 11:    // 첫 접속 시 유저 갱신
+                        server.sendUserListToAll();
                         break;
                     case 33:    // 패널의 state값 받아옴
                         panelState = msg.getPanelState();

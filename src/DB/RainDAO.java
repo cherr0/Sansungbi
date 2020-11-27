@@ -1,11 +1,14 @@
 package DB;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import VO.AcidRain;
 import VO.Message;
@@ -84,11 +87,35 @@ public class RainDAO {
 		}
 	}
 	
-	// select words
-	// 추후 필요하면 메소드 생성
+	// 각 클라이언트별 지정한 타입에 맞는 단어들을 골라서 전송
 	public Message selectWords(AcidRain acidrain) {
-		
 		Message msg = null;
+		ArrayList<AcidRain> list = null;
+		AcidRain rain = null;
+
+		// 각 단어 파일들 경로
+		String[] typeName = {"./res/IT.txt","./res/food.txt","./res/general.txt","./res/game.txt"};
+
+		try {
+			msg = new Message();
+			list = new ArrayList<>();
+			int typeidx = acidrain.getTypeidx()-1;
+			Scanner inputStream = new Scanner(new File(typeName[typeidx]));
+			System.out.println("불러온 워드 파일: " + typeName[typeidx]);
+			// inputStream 객체 생성해서 idx에 맞는 파일 읽어옴
+
+			while(inputStream.hasNextLine()) { 	// txt 파일에 더 이상 단어가 없을 때까지 읽음
+				rain = new AcidRain();		// 메세지 전송 방식 통일을 위해 rain 객체 사용
+				rain.setWord(inputStream.nextLine());	// 리스트에 각 단어들을 추가함
+
+				list.add(rain);
+			}
+
+			System.out.println(new StringBuilder(list.toString()));
+			msg.setList(list);
+		}catch(FileNotFoundException e) {
+			System.out.println("단어 파일을 찾을 수 없음: " + e);
+		}
 		
 		
 		return msg;

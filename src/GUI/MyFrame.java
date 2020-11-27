@@ -1,12 +1,11 @@
 package GUI;
 
+
 import client.Client;
 import client.MyListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class MyFrame extends JFrame {
 
@@ -42,12 +41,9 @@ public class MyFrame extends JFrame {
 		add(ePanel, BorderLayout.EAST);
 		add(sPanel, BorderLayout.SOUTH);
 
-		addWindowListener(new ClosingPopUp(client));
+		addWindowListener(new ClosingAlert(client));
 
 		setVisible(true);
     }
 
-    public void setMyListener(MyListener ml){
-    	this.ml = ml;
-	}
 }

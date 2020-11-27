@@ -6,11 +6,11 @@ import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class ClosingPopUp extends WindowAdapter {
+public class ClosingAlert extends WindowAdapter {
     private Client c;
     private MyFrame f;
 
-    public ClosingPopUp(Client client) {
+    public ClosingAlert(Client client) {
         this.c = client;
         this.f = client.f;
     }

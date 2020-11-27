@@ -67,16 +67,18 @@ public class Client {
             oos.flush();    // 출력 스트림을 비움
             ois = new ObjectInputStream(s.getInputStream());
             System.out.println("입출력 셋팅 완료");
-            Message msg = (Message) ois.readObject();
-            System.out.println(msg.toString());
             selectWordTypeName();   // wordType 가져와서 넣어줌
             System.out.println("wordType 셋팅 완료");
 
+            searchUser();   // 첫 접속 시 유저 리스트 요청
+            // 요청해서 준비된 리스트가 readerThread 시작되면서 바로 받음
             System.out.println("readerThread 시작 전");
             new ReaderThreadClient(this,ois).start();
             System.out.println("readerThread 시작 완료");
 
             myState = Message.IS_CONNECTED;
+
+
 
         }catch (Exception e){
             System.out.print("클라이언트 접속 오류: " + e);
@@ -108,7 +110,17 @@ public class Client {
 
     }
 
-
+    // 첫 접속 시 유저 갱신
+    void searchUser(){
+        Message msg = new Message();
+        msg.setType(11);
+        try{
+            oos.writeObject(msg);
+            System.out.println("서버에 유저 리스트 요청");
+        }catch(IOException e){
+            System.out.println("유저 리스트 요청 오류: " + e);
+        }
+    }
 
     void insertUser(String name) {
         AcidRain rain = new AcidRain();
@@ -196,19 +208,67 @@ public class Client {
 
     // 게임 시작 준비
     void isReady() {
+        myState = Message.IS_READY;
         f.cPanel.setPanelState(ClientPanel.PANEL_STATE_ISREADY);
         System.out.println("isReady() 메소드 시작");
+        if(selectWords()){  // true : 타입지정실패, false : 타입 지정 완료
+            JOptionPane.showMessageDialog(null, "타입을 잘못 지정하셨습니다",
+                    "Message", JOptionPane.ERROR_MESSAGE);
+            // parentComponent(null) = 화면 중앙에 출력
+            f.ePanel.typeSelect.setText("");
+            return;     // 타입 지정을 잘못하였기에 리턴
+        }
+        // selectWords()에서 지나고나면 ReaderThreadClient에서 입력을 받아서 실행됨
 
-        try{
-            Thread.sleep(1000);
+
+        try{ // 다른 유저가 준비될 때 까지 잠시 기다림
+            Thread.sleep(3000);
         }catch(InterruptedException e){
             System.out.println("isReady sleep err:" + e);
         }
+
 
         // 애니메이션 시작 flag
         f.cPanel.onOffThread();
 
         f.ePanel.start.setEnabled(false);
+    }
+
+    boolean selectWords() {
+        int typeidx = 0;
+
+        for(int i=0 ; i<typeList.size() ; i++) {
+            String typeSelect = f.ePanel.typeSelect.getText();  // 클라이언트가 정한 타입을 가져옴
+            if(typeSelect.equals(typeList.get(i))) {
+                typeidx = i + 1;
+            }
+        }
+
+        if(typeidx==0){     //타입이 0이면 리스트에 없는 것을 적었기 때문에 잘못 지정한 것것
+           System.out.println("타입을 잘못 지정하셨습니다");
+            return true;    // 지정된 타입이 아닌 다른 것을 적으면 리턴
+        }
+
+        System.out.println("typeidx : " + typeidx);
+
+        AcidRain acidRain = new AcidRain();
+
+        acidRain.setTypeidx(1);     // select
+        acidRain.setTypeidx(typeidx);
+
+        Message msg = new Message();
+        msg.setType(1);
+        msg.setAcidrain(acidRain);
+        msg.setPanelState(f.cPanel.getPanelState());
+        System.out.println("msg의 typeidx: " + msg.getAcidrain().getTypeidx());
+
+        try{
+            oos.writeObject(msg);
+            System.out.println("단어 타입에 맞는 리스트 서버에 요청 완료");
+        }catch(IOException e){
+            System.out.println("msg sent error: " + e);
+        }
+        return false;
     }
 
     // Panel에 보낼 것
@@ -260,36 +320,7 @@ public class Client {
         f.sPanel.tfEntry.setText("");
     }
 
-    void selectWords() {
-        // 0=insert     1=select     2=update     3=delete
-        int typeidx = 0;
 
-        for(int i=0 ; i<typeList.size() ; i++) {
-            String typeSelect = f.ePanel.typeSelect.getText();
-            if(typeSelect.equals(typeList.get(i))){
-                typeidx = i+1;
-            }
-        }
-        System.out.println("typeidx : " + typeidx);
-
-        AcidRain acidRain = new AcidRain();
-
-        acidRain.setTypeidx(1);     // select
-        acidRain.setTypeidx(typeidx);
-
-        Message msg = new Message();
-        msg.setType(1);
-        msg.setAcidrain(acidRain);
-        msg.setPanelState(f.cPanel.getPanelState());
-        System.out.println("msg의 typeidx: " + msg.getAcidrain().getTypeidx());
-
-        try{
-            oos.writeObject(msg);
-            System.out.println("msg sent well");
-        }catch(IOException e){
-            System.out.println("msg sent error: " + e);
-        }
-    }
 
     public void showUserList(String[] nameList){
         f.ePanel.userList.setText("");
@@ -315,10 +346,12 @@ public class Client {
         try{
 
             oos.writeObject(msg);   // 보드말고 메세지로 객체화 시켜 보낸다
+
             System.out.println("타입 리스트 요청 완료");
 
             msg = (Message) ois.readObject();
-            System.out.println(msg.toString());
+
+            System.out.println(msg.getType());
 
             rList = msg.getList();
             System.out.println("rList is empty?" + (rList == null ? " O " : " X "));

@@ -1,17 +1,14 @@
 package client;
 
 import GUI.*;
-import VO.AcidRain;
-import VO.Message;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class MyListener implements ActionListener {
+
+public class MyListener implements ActionListener, KeyListener {
 
     MyFrame f;
     Client c;
@@ -20,23 +17,6 @@ public class MyListener implements ActionListener {
     SPanel sp;
     NPanel np;
 
-    // 통신 관련 변수
-    private ObjectInputStream ois;
-    private ObjectOutputStream oos;
-
-    // 콘솔 출력 thread 테스트용 리스트, 스레드
-    private ArrayList<String> typeList;
-    private ArrayList<String> wordList = new ArrayList<String>();
-    private ThreadTest ttest;
-
-    public MyListener(Client c, ObjectInputStream ois, ObjectOutputStream oos) {
-
-    }
-
-    public MyListener(ClientPanel cp) {
-        this.cp = cp;
-    }
-
     public MyListener(MyFrame f){
         this.c = f.client;
         this.f = f;
@@ -44,8 +24,6 @@ public class MyListener implements ActionListener {
         this.ep = f.ePanel;
         this.sp = f.sPanel;
         this.np = f.nPanel;
-        this.ois = c.ois;
-        this.oos = c.oos;
     }
 
     @Override
@@ -60,8 +38,8 @@ public class MyListener implements ActionListener {
                  System.out.println("start 버튼 입력 받음");
                  c.isReady();
                  break;
-             case "enter":
-                 System.out.println("enter 버튼 입력 받음");
+             case "word":
+                 System.out.println("word 버튼 입력 받음");
                  c.enterWords();
                  break;
              case "sign":
@@ -69,6 +47,28 @@ public class MyListener implements ActionListener {
                  c.nameInsertUpdate();
                  break;
          }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // 좌판의 어떤 키로 문자가 눌렸을 때 실행
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // 키보드가 눌렸을 때 실행
+        if(e.getKeyCode() == KeyEvent.VK_ENTER){
+            System.out.println("word 버튼 입력 받음");
+            c.enterWords();
+        }
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // 키보드의 키가 눌렸다 때었을 때 실행
+
+
     }
 }
 

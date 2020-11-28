@@ -39,7 +39,6 @@ public class Client {
     // 콘솔 출력 thread 테스트용 리스트와 스레드
     private ArrayList<String> typeList;
     private ArrayList<String> wList = new ArrayList<>();
-    private ThreadTest ttest;
 
 
     // 통신 관련 변수
@@ -62,6 +61,7 @@ public class Client {
         System.out.println("GUI 셋팅 완료");
 
         try{
+            myState = Message.IS_CONNECTED;
             s = new Socket(getLocalIP(),5050);
             oos = new ObjectOutputStream(s.getOutputStream());
             oos.flush();    // 출력 스트림을 비움
@@ -72,12 +72,8 @@ public class Client {
 
             searchUser();   // 첫 접속 시 유저 리스트 요청
             // 요청해서 준비된 리스트가 readerThread 시작되면서 바로 받음
-            System.out.println("readerThread 시작 전");
             new ReaderThreadClient(this,ois).start();
             System.out.println("readerThread 시작 완료");
-
-            myState = Message.IS_CONNECTED;
-
 
 
         }catch (Exception e){
@@ -90,6 +86,7 @@ public class Client {
         f = new MyFrame(this, title);
     }
 
+    // 추후 추가
     void updateUserScore() {
 
     }
@@ -122,6 +119,7 @@ public class Client {
         }
     }
 
+    // 유저 등록
     void insertUser(String name) {
         AcidRain rain = new AcidRain();
         rain.setName(name);     // 현재 이름 지정
@@ -161,6 +159,7 @@ public class Client {
         }
     }
 
+    // 이름 변경 메소드
     void rename(String newName) {
         if(name.isEmpty()) return;
         oldName = name;

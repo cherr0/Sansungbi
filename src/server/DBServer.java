@@ -41,7 +41,7 @@ public class DBServer {
             String remoteIP = "";
             try{
                 System.out.println("서버 접속 대기중");
-                s = ss.accept();
+                s = ss.accept();       // 클라이언트가 접속 할 때까지 대기
                 remoteIP = s.getInetAddress().getHostAddress(); // IP 가져옴
 
                 System.out.println(remoteIP + "가 서버에 접속했습니다.");
@@ -80,7 +80,7 @@ public class DBServer {
     }
 
 
-    // 서버에 놔두는 단 하나의 DrawWord 리스트를 각 user에게 전달해줌
+
     public void createDrawWordList(ArrayList<AcidRain> list){
         dwList = new ArrayList<DrawWord>();
         ArrayList<AcidRain> rList = list;
@@ -110,10 +110,6 @@ public class DBServer {
         }
     }
 
-    // 클라이언트에게 유저리스트 전송
-    public void sendUserList(User user){
-        user.sendMessage(11, getUserList());
-    }
 
     // 유저 퇴장 시 user객체 제거
     public void exitUser(User user){

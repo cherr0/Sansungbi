@@ -243,7 +243,7 @@ public class Client {
             }
         }
 
-        if(typeidx==0){     //타입이 0이면 리스트에 없는 것을 적었기 때문에 잘못 지정한 것것
+        if(typeidx==0){     //타입이 0이면 리스트에 없는 것을 적었기 때문에 잘못 지정한 것
            System.out.println("타입을 잘못 지정하셨습니다");
             return true;    // 지정된 타입이 아닌 다른 것을 적으면 리턴
         }

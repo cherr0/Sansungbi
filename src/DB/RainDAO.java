@@ -143,7 +143,7 @@ public class RainDAO {
 
 	
 
-	// 기존 : 서버에서 유저가 나갈 시 유저 delete
+	// 기존 :
 	public void deleteUser(AcidRain acidrain) {
 		
 		Connection conn = null;

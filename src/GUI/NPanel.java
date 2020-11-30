@@ -13,7 +13,7 @@ public class NPanel extends JPanel {
 
 
     public JTextField tfUsername; // 유저 이름 등록란
-    public JButton signUp;        // 게임 스타트, 서버에 이름 등록
+    public JButton signUp;        // 서버에 이름 등록
 
     public NPanel(MyListener ml) {
         setLayout(new BorderLayout());
